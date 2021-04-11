@@ -1,10 +1,11 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import get_object_or_404
+from django.db.models import Count
 
 from rest_framework.views import APIView
 from rest_framework.response import Response 
 
-from patients.models import Person
-from patients.serializers import PersonListSerializer
+from patients.models import Person, Death
+from patients.serializers import PersonListSerializer, RaceListSerializer, EthnicityListSerializer
 
 
 # Create your views here.
@@ -41,5 +42,26 @@ class PatientGenderView(APIView):
 
 
 # 인종별 환자 수
+class PatientRaceView(APIView):
+    def get(self, request):
+        patients_cnt_by_race = Person.objects.values('race_concept_id').order_by('race_concept_id').annotate(count=Count('race_concept_id'))
+        race_serializer = RaceListSerializer(patients_cnt_by_race, many=True)
+        return Response(race_serializer.data)
+
+
 # 민족별 환자 수
+class PatientEthnicityView(APIView):
+    def get(self, request):
+        patients_cnt_by_ethnicity = Person.objects.values('ethnicity_concept_id').order_by('ethnicity_concept_id').annotate(count=Count('ethnicity_concept_id'))
+        ethnicity_serializer = EthnicityListSerializer(patients_cnt_by_ethnicity, many=True)
+        return Response(ethnicity_serializer.data)
+
+
 # 사망 환자 수
+class PatientDeathView(APIView):
+    def get(self, request):
+        patient_death_cnt = Death.objects.all().count()
+        data = {
+            'death_count': patient_death_cnt
+        }
+        return Response(data)
