@@ -2,19 +2,27 @@ from django.shortcuts import get_object_or_404
 from django.db.models import Count
 
 from rest_framework.views import APIView
+from rest_framework.generics import ListAPIView
 from rest_framework.response import Response 
+from rest_framework.pagination import PageNumberPagination
 
 from patients.models import Person, Death
-from patients.serializers import PersonListSerializer, RaceListSerializer, EthnicityListSerializer
+from patients.serializers import PersonListSerializer, DeathListSerializer, RaceListSerializer, EthnicityListSerializer
 
 
 # Create your views here.
-# 데이터 10줄 조회
-class TestView(APIView):
-    def get(self, request):
-        patients = Person.objects.all()[:10]
-        patient_serializer = PersonListSerializer(patients, many=True)
-        return Response(patient_serializer.data)
+# patient list 조회 (10개씩 pagination)
+class PatientListView(ListAPIView):
+    queryset = Person.objects.all().order_by('person_id')
+    serializer_class = PersonListSerializer
+    pagination_class = PageNumberPagination
+
+
+# death list 조회 (10개씩 pagination)
+class DeathListView(ListAPIView):
+    queryset = Death.objects.all().order_by('person_id')
+    serializer_class = DeathListSerializer
+    pagination_class = PageNumberPagination
 
 
 # 전체 환자 수
