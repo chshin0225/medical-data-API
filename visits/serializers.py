@@ -1,6 +1,25 @@
 from rest_framework import serializers
 
+from .models import VisitOccurrence, ConditionOccurrence, DrugExposure
 from concepts.models import Concept
+
+
+class VisitListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = VisitOccurrence
+        fields = '__all__'
+
+
+class ConditionOccurrenceListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ConditionOccurrence
+        fields = '__all__'
+
+
+class DrugExposureListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = DrugExposure
+        fields = '__all__'
 
 
 class VisitTypeListSerializer(serializers.Serializer):

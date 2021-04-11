@@ -3,12 +3,35 @@ from django.db.models import Count, F, Subquery
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework.generics import ListAPIView
+from rest_framework.pagination import PageNumberPagination
 
-from .models import VisitOccurrence
-from .serializers import VisitTypeListSerializer, VisitGenderSerializer, VisitRaceSerializer, VisitEthnicitySerializer
+from .models import VisitOccurrence, ConditionOccurrence, DrugExposure
+from .serializers import VisitListSerializer, ConditionOccurrenceListSerializer, DrugExposureListSerializer, VisitTypeListSerializer, VisitGenderSerializer, VisitRaceSerializer, VisitEthnicitySerializer
 from patients.models import Person
 
 # Create your views here.
+# visit list 조회 (10개씩 pagination)
+class VisitListView(ListAPIView):
+    queryset = VisitOccurrence.objects.all().order_by('visit_occurrence_id')
+    serializer_class = VisitListSerializer
+    pagination_class = PageNumberPagination
+
+
+# condition occurrence list 조회 (10개씩 pagination)
+class ConditionOccurrenceListView(ListAPIView):
+    queryset = ConditionOccurrence.objects.all().order_by('visit_occurrence_id')
+    serializer_class = ConditionOccurrenceListSerializer
+    pagination_class = PageNumberPagination
+
+
+# drug exposure list 조회 (10개씩 pagination)
+class DrugExposureListView(ListAPIView):
+    queryset = DrugExposure.objects.all().order_by('visit_occurrence_id')
+    serializer_class = DrugExposureListSerializer
+    pagination_class = PageNumberPagination
+
+
 # 방문 유형별 방문 수
 class VisitTypeView(APIView):
     def get(self, request):
