@@ -6,7 +6,6 @@ from patients.models import Person
 # 방문에 대한 정보
 class VisitOccurrence(models.Model):
     visit_occurrence_id = models.BigIntegerField(primary_key=True)
-    # person_id = models.BigIntegerField(blank=True, null=True)
     person = models.ForeignKey(Person, blank=True, null=True, on_delete=models.CASCADE, related_name='visits')
     visit_concept_id = models.IntegerField(blank=True, null=True)
     visit_start_date = models.DateField(blank=True, null=True)

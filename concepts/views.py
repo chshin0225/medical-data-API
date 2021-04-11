@@ -10,9 +10,9 @@ from .serializers import ConceptListSerializer
 
 
 # Create your views here.
-# concept들 조회 (10개씩 pagination)
+# concept list 조회 (10개씩 pagination)
 class ConceptListView(ListAPIView):
-    queryset = Concept.objects.all()
+    queryset = Concept.objects.all().order_by('concept_id')
     serializer_class = ConceptListSerializer
     pagination_class = PageNumberPagination
 
