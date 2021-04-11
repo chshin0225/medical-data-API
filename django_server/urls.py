@@ -45,5 +45,5 @@ urlpatterns = [
     
     # my apps
     path('patients/', include('patients.urls')),
-    
+    path('concepts/', include('concepts.urls')),
 ]

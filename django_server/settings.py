@@ -60,6 +60,7 @@ INSTALLED_APPS = [
 
     # my apps
     'patients',
+    'concepts',
 ]
 
 MIDDLEWARE = [
