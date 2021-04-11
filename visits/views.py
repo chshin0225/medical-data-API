@@ -5,7 +5,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 
 from .models import VisitOccurrence
-from .serializers import VisitTypeListSerializer, VisitGenderSerializer
+from .serializers import VisitTypeListSerializer, VisitGenderSerializer, VisitRaceSerializer, VisitEthnicitySerializer
 from patients.models import Person
 
 # Create your views here.
@@ -26,9 +26,19 @@ class VisitGenderView(APIView):
 
 
 # 인종별 방문 수
+class VisitRaceView(APIView):
+    def get(self, request):
+        visit_cnt_by_race = VisitOccurrence.objects.values('person__race_concept_id').annotate(race=F('person__race_concept_id')).order_by('race').annotate(count=Count('race')).values('race', 'count')
+        visit_race_serializer = VisitRaceSerializer(visit_cnt_by_race, many=True)
+        return Response(visit_race_serializer.data)
 
 
 # 민족별 방문 수
+class VisitEthnicityView(APIView):
+    def get(self, request):
+        visit_cnt_by_ethnicity = VisitOccurrence.objects.values('person__ethnicity_concept_id').annotate(ethnicity=F('person__ethnicity_concept_id')).order_by('ethnicity').annotate(count=Count('ethnicity')).values('ethnicity', 'count')
+        visit_ethnicity_serializer = VisitEthnicitySerializer(visit_cnt_by_ethnicity, many=True)
+        return Response(visit_ethnicity_serializer.data)
 
 
 # 방문시 연령대(10세 단위) 방문 수

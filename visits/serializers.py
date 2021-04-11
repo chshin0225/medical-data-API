@@ -20,3 +20,21 @@ class VisitGenderSerializer(serializers.Serializer):
     def get_gender(self, gender):
         gender = Concept.objects.get(concept_id=gender['gender']).concept_name
         return gender
+
+
+class VisitRaceSerializer(serializers.Serializer):
+    race = serializers.SerializerMethodField('get_race')
+    count = serializers.IntegerField()
+
+    def get_race(self, race):
+        race = Concept.objects.get(concept_id=race['race']).concept_name
+        return race
+
+
+class VisitEthnicitySerializer(serializers.Serializer):
+    ethnicity = serializers.SerializerMethodField('get_ethnicity')
+    count = serializers.IntegerField()
+
+    def get_ethnicity(self, ethnicity):
+        ethnicity = Concept.objects.get(concept_id=ethnicity['ethnicity']).concept_name
+        return ethnicity
